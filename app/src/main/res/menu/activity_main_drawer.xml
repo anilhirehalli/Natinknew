@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_addcontacts"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="Add Contacts" />
+        <item
+            android:id="@+id/nav_contacts"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Emergency Contact List" />
+
+    </group>
+
+  <item android:title="Communicate">
+        <menu>
+            <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share App" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/nav_bug"
+            android:icon="@drawable/ic_bug_report_black_24dp"
+            android:title="Report Bug" />
+        <item
+            android:id="@+id/nav_like"
+            android:icon="@drawable/ic_like_black_24dp"
+            android:title="Like Us or Follow" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@mipmap/engin2"
+            android:title="About EngIN" />
+        </menu>
+    </item>
+
+</menu>

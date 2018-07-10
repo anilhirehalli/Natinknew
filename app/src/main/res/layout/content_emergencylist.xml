@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.admin.natink_trial.emergencylist"
+    tools:showIn="@layout/activity_emergencylist"
+    android:background="#e2e2e2">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/idlist"
+        android:visibility="invisible"
+        android:focusable="false">
+    </ListView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/firstline1"
+            android:layout_marginTop="120dp"
+            android:text="Your Emergency contact "
+            android:textSize="22dp"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/secondline1"
+            android:layout_marginTop="160dp"
+            android:text="list is empty"
+            android:textSize="22dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/thirdline1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:text="Press + icon "
+            android:textSize="22dp"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:id="@+id/fourthline1"
+            android:layout_marginTop="240dp"
+            android:text="to add emergency conatct"
+            android:textSize="22dp"
+            android:textStyle="bold"/>
+    </RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="send message"
+        android:textAlignment="center"
+        android:id="@+id/send"/>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:descendantFocusability="blocksDescendants"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.admin.natink_trial.reader"
+    android:background="#e2e2e2"
+    android:padding="4dp">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/toolbar"
+    android:background="@drawable/tool"
+    android:paddingBottom="30dp"
+    android:elevation="100dp"
+    tools:targetApi="lollipop">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:paddingTop="10sp"
+        android:layout_centerHorizontal="true"
+        android:text= "Add Emergency Contacts"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:paddingBottom="5sp"/>
+
+
+    <SearchView
+        android:id="@+id/searcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:iconifiedByDefault="false"
+        android:ems="20"
+        android:queryHint="Search in your Contacts"
+        android:inputType="textAutoComplete" />
+
+
+</RelativeLayout>
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/listview1"
+        android:layout_below="@+id/toolbar"
+        android:padding="2sp"
+        android:focusable="false"
+
+
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
+        app:srcCompat="@drawable/ic_save_black_24dp" />
+
+</RelativeLayout>
