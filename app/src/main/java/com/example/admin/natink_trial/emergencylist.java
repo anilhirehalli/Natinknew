@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -253,6 +254,7 @@ public class emergencylist extends AppCompatActivity {
                     .setContentIntent(pendingintent)
                     .setPriority(Notification.PRIORITY_MAX)
                     .setOngoing(true) // Again, THIS is the important line
+
                     .build();
 
 

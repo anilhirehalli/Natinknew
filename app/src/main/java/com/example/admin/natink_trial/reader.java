@@ -44,8 +44,25 @@ public class reader extends AppCompatActivity {
         StoreContacts = new ArrayList<String>();
 
         EnableRuntimePermission();
+        searchView=(SearchView) findViewById(R.id.searchView1);
+        searchView.setQueryHint("Search View");
 
-        searchView=(SearchView) findViewById(R.id.searcher);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                arrayAdapter.getFilter().filter(newText);
+                listView.setAdapter(arrayAdapter);
+                return false;
+            }
+        });
+        /*searchView=(SearchView) findViewById(R.id.searchView1);
 
 
 
@@ -64,7 +81,7 @@ public class reader extends AppCompatActivity {
                 listView.setAdapter(arrayAdapter);
                 return false;
             }
-        });
+        });*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
