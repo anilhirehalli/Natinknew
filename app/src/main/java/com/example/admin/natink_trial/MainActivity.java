@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -43,17 +46,22 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.pddstudio.easyflashlight.EasyFlashlight;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Integer time,longer=3500,shorter=1000;
+    MediaPlayer siren, whistl,malevoice,fevoice;
     String uriString;
     RelativeLayout layout;
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     double latitude, longitude;
-
+    AudioManager am;
+    Boolean siren_on = false, whist = false, male = false, female = false,sos=false;
+    static MainActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        instance = this;
         layout = (RelativeLayout) findViewById(R.id.mainer);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
 
@@ -80,14 +89,39 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+       /* EasyFlashlight.init(this);*/
     }
-
+  /*  @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        //For Android M Support, call this in your onRequestPermissionsResult method
+        EasyFlashlight.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+*/
     @Override
     public void onStart() {
 
         CustomNotification();
         super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        try {
+            siren.stop();
+            siren.release();
+
+        } catch (Exception e) {
+
+        }
+        try {
+            whistl.stop();
+            whistl.release();
+
+        } catch (Exception e) {
+
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -192,39 +226,237 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void emergency(View view) {
-        Log.d("gps","clicked");
-        Toast.makeText(getApplicationContext(),"hi",Toast.LENGTH_SHORT).show();
-locator();
+        Log.d("gps", "clicked");
+        Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
+        locator();
     }
 
     public void siren(View view) {
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        try {
+            whistl.stop();
+            whistl.release();
+        } catch (Exception e) {
 
+        }
+        whist = false;
+        if (siren_on) {
+            try {
+                siren.stop();
+                siren.release();
+            } catch (Exception e) {
+
+            }
+            siren_on = false;
+        } else {
+            siren = MediaPlayer.create(this, R.raw.siren);
+            siren.start();
+            siren.setLooping(true);
+            siren_on = true;
+        }
 
     }
 
     public void malevoi(View view) {
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        try {
+            siren.stop();
+            siren.release();
+
+        } catch (Exception e) {
+
+        }
+        siren_on = false;
+        try {
+            whistl.stop();
+            whistl.release();
+
+        } catch (Exception e) {
+
+        }
+        whist = false;
+        try {
+            fevoice.stop();
+            fevoice.release();
+
+        } catch (Exception e) {
+
+        }
+        female = false;
+        if (male) {
+            try {
+                malevoice.stop();
+                malevoice.release();
+            } catch (Exception e) {
+
+            }
+            male = false;
+        } else {
+            malevoice = MediaPlayer.create(this, R.raw.male);
+            malevoice.start();
+
+            male = true;
+        }
 
 
     }
 
     public void femalevoi(View view) {
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        try {
+            siren.stop();
+            siren.release();
+
+        } catch (Exception e) {
+
+        }
+        siren_on = false;
+        try {
+            whistl.stop();
+            whistl.release();
+
+        } catch (Exception e) {
+
+        }
+        whist = false;
+        try {
+            malevoice.stop();
+            malevoice.release();
+
+        } catch (Exception e) {
+
+        }
+        male = false;
+        if (female) {
+            try {
+                fevoice.stop();
+                fevoice.release();
+            } catch (Exception e) {
+
+            }
+            female = false;
+        } else {
+            fevoice = MediaPlayer.create(this, R.raw.female);
+            fevoice.start();
+
+            female = true;
+        }
 
 
     }
 
-    public void siren_disp(View view) {
+    public void whitsle(View view) {
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+        try {
+            siren.stop();
+            siren.release();
 
+        } catch (Exception e) {
+
+        }
+        siren_on = false;
+        try {
+            malevoice.stop();
+            malevoice.release();
+
+        } catch (Exception e) {
+
+        }
+        male = false;
+        try {
+            fevoice.stop();
+            fevoice.release();
+
+        } catch (Exception e) {
+
+        }
+        female = false;
+        if (whist) {
+            try {
+                whistl.stop();
+                whistl.release();
+            } catch (Exception e) {
+
+            }
+            whist = false;
+        } else {
+            whistl = MediaPlayer.create(this, R.raw.whitsle);
+            whistl.start();
+
+            whist = true;
+        }
 
     }
+
 
     public void flash(View view) {
+       /* if(EasyFlashlight.getInstance().canAccessFlashlight()) {
+            Thread t = new Thread() {
+                public void run() {
+                    if (!sos) {
+                        try {
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(1500);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOn();
+                            sleep(750);
+                            EasyFlashlight.getInstance().turnOff();
+                            sleep(750);
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        sos = true;
+                    } else {
+                        EasyFlashlight.getInstance().turnOff();
+                        sos=false;
+                    }
+                }
 
 
+            };
+            t.start();
+
+        }else{
+            Snackbar snackbar = Snackbar
+                    .make(layout, "Sorry,But we cannot find Flashlight function in your phone", Snackbar.LENGTH_LONG);
+            snackbar.show();
+        }
+*/
     }
 
     public void emergencyCont(View view) {
-
-
+        Intent intent = new Intent(MainActivity.this, emergencylist.class);
+        startActivity(intent);
     }
 
     public void CustomNotification() {
@@ -234,16 +466,26 @@ locator();
 
 
         // Open NotificationView Class on Notification Click
-        Intent intent = new Intent(this, NotificationView.class);
+       /* Intent intent = new Intent(this, NotificationView.class);*/
         // Send data to NotificationView Class
         // Open NotificationView.java Activity
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+       /* PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);*/
+
+        Notification notification = new Notification(R.drawable.engin, null, System.currentTimeMillis());
+
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        //this is the intent that is supposed to be called when the button is clicked
+        Intent switchIntent = new Intent(this, switchButtonListener.class);
+        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0, switchIntent, 0);
+
+        remoteViews.setOnClickPendingIntent(R.id.imagenotiright, pendingSwitchIntent);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 // Set Icon
                 .setSmallIcon(R.drawable.engin)
-                .setContentIntent(pIntent)
+                // .setContentIntent(pIntent)
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MAX)
                 .setContent(remoteViews);
@@ -252,11 +494,13 @@ locator();
         // Locate and set the Image into customnotificationtext.xml ImageViews
 
         NotificationManager notificationmanager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
         // Build Notification with Notification Manager
         notificationmanager.notify(0, builder.build());
 
 
     }
+
 
     public void permissionchecker() {
         Dexter.withActivity(this)
@@ -268,7 +512,8 @@ locator();
                         Manifest.permission.SEND_SMS,
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_WIFI_STATE)
+                        Manifest.permission.ACCESS_WIFI_STATE,
+                        Manifest.permission.CAMERA)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -329,9 +574,9 @@ locator();
     }
 
     public void locator() {
-        if (checkPermissions()) {
+      /*  if (checkPermissions()) {
             locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-            Log.d("gps","inside");
+            Log.d("gps", "inside");
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
@@ -348,12 +593,12 @@ locator();
                 @Override
                 public void onProviderEnabled(String provider) {
                     Location location = new Location(LocationManager.GPS_PROVIDER);
-                    Log.d("gps","checking ");
+                    Log.d("gps", "checking ");
                     latitude = location.getLatitude();
                     longitude = location.getLongitude();
                     //  Toast.makeText(getApplicationContext(),"on provide enabled is called",Toast.LENGTH_SHORT).show();
-                     Toast.makeText(getApplicationContext(),latitude+" latitdue "+longitude+"longitude",Toast.LENGTH_SHORT).show();
-                    Log.d("gps",latitude+" latitdue "+longitude+"longitude");
+                    Toast.makeText(getApplicationContext(), latitude + " latitdue " + longitude + "longitude", Toast.LENGTH_SHORT).show();
+                    Log.d("gps", latitude + " latitdue " + longitude + "longitude");
 
                 }
 
@@ -387,7 +632,53 @@ locator();
                         }
                     }).check();
         }
+*/
+    }
 
+    public void bugger(View view) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.setPackage("com.google.android.gm");
+        // i.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"engin.mysuru@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Reporting a bug .(do include a screen shot)");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void shareit(View view) {
+        Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
+        ShareingIntent.setType("text/plain");
+        ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=0B7jzP24_Ndx1YWY4MXliQW4wcU0");
+        startActivity(ShareingIntent);
+    }
+
+    public void feedback(View view) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.setPackage("com.google.android.gm");
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"engin.mysuru@gmail.com"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Feed back");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static class switchButtonListener extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("test","test");
+            instance.tonoti();
+        }
+    }
+    public void tonoti(){
+        Intent to = new Intent(MainActivity.this, NotificationView.class);
+        startActivity(to);
     }
 }
 

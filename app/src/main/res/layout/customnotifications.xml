@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:paddingBottom="15dp"
     android:paddingTop="15dp"
-    android:background="#84a6fb">
+    android:background="#84a6fb"
+    android:padding="10dp"
+    >
 
     <ImageView
         android:id="@+id/imagenotileft"
@@ -20,8 +22,11 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/text"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/text"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/text"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
         android:text="An S.O.S to the rescue"
         android:textSize="15sp" />
 
@@ -30,17 +35,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imagenotileft"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/imagenotileft"
+        android:layout_toRightOf="@+id/imagenotileft"
         android:text="Press this button for sending S.O.S" />
 
-    <ImageView
+    <Button
         android:id="@+id/imagenotiright"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
 
-        android:layout_alignBottom="@+id/text"
+        android:layout_alignBottom="@+id/imagenotileft"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_siren3" />
+        android:background="#e2e2e2"
+        android:elevation="20dp"
+        android:text="S.O.S"
+        />
 
 </RelativeLayout>

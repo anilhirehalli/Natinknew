@@ -115,7 +115,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:onClick="siren_disp">
+                    android:onClick="whitsle">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_whistle" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_flashlight" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -208,7 +208,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_man" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -242,7 +242,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_girl" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -275,7 +275,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_contacts_black_24dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -321,7 +321,8 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/round">
+                    android:background="@drawable/round"
+                    android:onClick="bugger">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -333,13 +334,14 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_bug_report_black_24dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
-                            android:text="Settings"
+                            android:text="Bug Report"
                             android:textAlignment="center"
                             android:textColor="@android:color/black"
                             android:textSize="16sp" />
@@ -354,7 +356,8 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="1" >
+                    android:layout_weight="1"
+                    android:onClick="shareit">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -366,13 +369,13 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_menu_share" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
 
-                            android:text="Donate"
+                            android:text="Share"
                             android:textAlignment="center"
                             android:textColor="@android:color/black"
                             android:textSize="16sp" />
@@ -386,7 +389,8 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/round">
+                    android:background="@drawable/round"
+                    android:onClick="feedback">
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -398,7 +402,7 @@
                             android:layout_width="50sp"
                             android:layout_height="50sp"
                             android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_siren3" />
+                            app:srcCompat="@drawable/ic_menu_send" />
 
                         <TextView
                             android:layout_width="wrap_content"
