@@ -1,12 +1,15 @@
 package com.example.admin.natink_trial;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,14 +18,17 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.os.CountDownTimer;
 import android.provider.Settings;
 
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -38,6 +44,8 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -48,6 +56,8 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.pddstudio.easyflashlight.EasyFlashlight;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -55,17 +65,36 @@ public class MainActivity extends AppCompatActivity
     Integer time,longer=3500,shorter=1000;
     MediaPlayer siren, whistl,malevoice,fevoice;
     String uriString;
+    String channelId = "channel-01";
+    ProgressDialog progressDialog;
     RelativeLayout layout;
     protected LocationManager locationManager;
     protected LocationListener locationListener;
     double latitude, longitude;
     AudioManager am;
+    ArrayList<String> sendmessage = new ArrayList<String>();
     Boolean siren_on = false, whist = false, male = false, female = false,sos=false;
     static MainActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+
+            @Override
+            public void onFinish() {
+               loaddata();
+               if(sendmessage.isEmpty())
+               {
+               Intent i = new Intent(MainActivity.this,emergencylist.class);
+               startActivity(i);
+               }
+            }
+        }.start();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,10 +115,13 @@ public class MainActivity extends AppCompatActivity
         permissionchecker();
 
         CustomNotification();
+        RemoteViews remoteViews = new RemoteViews(getPackageName(),
+                R.layout.customnotifications);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
        /* EasyFlashlight.init(this);*/
     }
   /*  @Override
@@ -165,7 +197,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_share) {
             Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
             ShareingIntent.setType("text/plain");
-            ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=0B7jzP24_Ndx1YWY4MXliQW4wcU0");
+            ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=13arPcJphlH1J7ffJdV5FSfHRkiGcvbyT");
             startActivity(ShareingIntent);
         } else if (id == R.id.nav_feedback) {
             Intent i = new Intent(Intent.ACTION_SEND);
@@ -179,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_bug) {
-            Intent i = new Intent(Intent.ACTION_SEND);
+           Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
             i.setPackage("com.google.android.gm");
             // i.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
@@ -192,6 +224,7 @@ public class MainActivity extends AppCompatActivity
             }
 
         } else if (id == R.id.nav_like) {
+
             try {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
@@ -227,7 +260,9 @@ public class MainActivity extends AppCompatActivity
 
     public void emergency(View view) {
         Log.d("gps", "clicked");
-        Toast.makeText(getApplicationContext(), "hi", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "SOS pressed", Toast.LENGTH_SHORT).show();
+        Intent to = new Intent(MainActivity.this, NotificationView.class);
+        startActivity(to);
         locator();
     }
 
@@ -258,7 +293,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void malevoi(View view) {
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+       am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
         try {
             siren.stop();
             siren.release();
@@ -292,7 +327,7 @@ public class MainActivity extends AppCompatActivity
             }
             male = false;
         } else {
-            malevoice = MediaPlayer.create(this, R.raw.male);
+            malevoice = MediaPlayer.create(this, R.raw.siren);
             malevoice.start();
 
             male = true;
@@ -336,7 +371,7 @@ public class MainActivity extends AppCompatActivity
             }
             female = false;
         } else {
-            fevoice = MediaPlayer.create(this, R.raw.female);
+            fevoice = MediaPlayer.create(this, R.raw.whitsle);
             fevoice.start();
 
             female = true;
@@ -488,6 +523,7 @@ public class MainActivity extends AppCompatActivity
                 // .setContentIntent(pIntent)
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MAX)
+                .setChannelId(channelId)
                 .setContent(remoteViews);
 
 
@@ -636,7 +672,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void bugger(View view) {
-        Intent i = new Intent(Intent.ACTION_SEND);
+       Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.setPackage("com.google.android.gm");
         // i.setClassName("com.google.android.gm", "com.google.android.gm.ComposeActivityGmail");
@@ -650,14 +686,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void shareit(View view) {
+       // configureButton();
         Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
         ShareingIntent.setType("text/plain");
-        ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=0B7jzP24_Ndx1YWY4MXliQW4wcU0");
+        ShareingIntent.putExtra(Intent.EXTRA_TEXT, "This is to inform you that your Friend is in need of your help. this link genrated by Natink\n" +
+                "to locate your friend. " + "\n" + "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude);
         startActivity(ShareingIntent);
+
+
+    }
+
+    @SuppressLint("MissingPermission")
+    private void configureButton() {
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
     }
 
     public void feedback(View view) {
-        Intent i = new Intent(Intent.ACTION_SEND);
+       Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.setPackage("com.google.android.gm");
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"engin.mysuru@gmail.com"});
@@ -677,8 +722,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
     public void tonoti(){
-        Intent to = new Intent(MainActivity.this, NotificationView.class);
+
+       Intent to = new Intent(MainActivity.this, NotificationView.class);
         startActivity(to);
+       // finish();
+    }
+    private void loaddata() {
+        if(sendmessage==null)
+        {
+
+        }
+        else {
+
+            SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+            Gson gson = new Gson();
+            String json = sharedPreferences.getString("task list", null);
+            Type type = new TypeToken<ArrayList<String>>() {
+            }.getType();
+            sendmessage = gson.fromJson(json, type);
+            if (sendmessage==null) {
+                sendmessage = new ArrayList<String>();
+
+            }
+
+
+            // Toast.makeText(getApplicationContext(), contacts+" contacts", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), sendmessage + " sendmessage", Toast.LENGTH_SHORT).show();
+
+        }
+
     }
 }
 

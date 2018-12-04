@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/natink_trial.iml" filepath="$PROJECT_DIR$/natink_trial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ashwinnewNatink.iml" filepath="$PROJECT_DIR$/ashwinnewNatink.iml" />
     </modules>
   </component>
 </project>

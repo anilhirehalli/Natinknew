@@ -48,6 +48,7 @@
             android:name=".reader"
             android:label="@string/title_activity_emergencylist"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".NotificationView"
             >
 

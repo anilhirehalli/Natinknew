@@ -35,8 +35,7 @@
             android:title="Like Us or Follow" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@mipmap/engin2"
-            android:title="About EngIN" />
+            android:icon="@drawable/emergecy"           android:title="About" />
         </menu>
     </item>
 

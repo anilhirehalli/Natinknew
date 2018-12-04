@@ -108,7 +108,7 @@ public class reader extends AppCompatActivity {
 
             phonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-            StoreContacts.add("Name: "+name + "\n"+ "Phone: " + phonenumber);
+            StoreContacts.add(name + "\n"+ phonenumber);
         }
 
         cursor.close();
