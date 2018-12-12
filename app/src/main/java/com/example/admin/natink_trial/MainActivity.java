@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -62,8 +63,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    Integer time,longer=3500,shorter=1000;
-    MediaPlayer siren, whistl,malevoice,fevoice;
+    Integer time, longer = 3500, shorter = 1000;
+    MediaPlayer siren, whistl, malevoice, fevoice;
     String uriString;
     String channelId = "channel-01";
     ProgressDialog progressDialog;
@@ -73,8 +74,9 @@ public class MainActivity extends AppCompatActivity
     double latitude, longitude;
     AudioManager am;
     ArrayList<String> sendmessage = new ArrayList<String>();
-    Boolean siren_on = false, whist = false, male = false, female = false,sos=false;
+    Boolean siren_on = false, whist = false, male = false, female = false, sos = false;
     static MainActivity instance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,17 +89,60 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFinish() {
-               loaddata();
-               if(sendmessage.isEmpty())
-               {
-               Intent i = new Intent(MainActivity.this,emergencylist.class);
-               startActivity(i);
-               }
+
             }
         }.start();
+        permissionchecker();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                latitude=location.getLatitude();
+                longitude=location.getLongitude();
+                Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
+                ShareingIntent.setType("text/plain");
+                ShareingIntent.putExtra(Intent.EXTRA_TEXT, "This is to inform you that your Friend is in need of your help. this link genrated by Natink\n" +
+                        "to locate your friend. " + "\n" + "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude);
+                startActivity(ShareingIntent);
+                //Toast.makeText(getApplicationContext(),"Its changed",Toast.LENGTH_SHORT).show();
+                progressDialog.setCancelable(false);
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000L, 2000.0f, locationListener);
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        };
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
+        {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET
+                },10);
+                return;
+            }
+        }
+        else
+        {
+           //
+            // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 300, locationListener);
+        }
         instance = this;
         layout = (RelativeLayout) findViewById(R.id.mainer);
         TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -112,24 +157,35 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        permissionchecker();
+
 
         CustomNotification();
         RemoteViews remoteViews = new RemoteViews(getPackageName(),
                 R.layout.customnotifications);
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-       /* EasyFlashlight.init(this);*/
+        /* EasyFlashlight.init(this);*/
     }
-  /*  @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        //For Android M Support, call this in your onRequestPermissionsResult method
-        EasyFlashlight.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode)
+        {
+            case  10:
+                if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED)
+                   // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 300, locationListener);
+                return;
+        }
     }
-*/
+    /*  @Override
+      public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+          //For Android M Support, call this in your onRequestPermissionsResult method
+          EasyFlashlight.getInstance().onRequestPermissionsResult(requestCode, permissions, grantResults);
+      }
+  */
     @Override
     public void onStart() {
 
@@ -187,6 +243,30 @@ public class MainActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }*/
+    public void shareit(View view) {
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Please wait..."); // Setting Message
+        progressDialog.setTitle("Getting location"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 300, locationListener);
+
+
+
+
+    }
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -571,6 +651,12 @@ public class MainActivity extends AppCompatActivity
                 })
                 .onSameThread()
                 .check();
+        loaddata();
+        if(sendmessage.isEmpty())
+        {
+            Intent i = new Intent(MainActivity.this,emergencylist.class);
+            startActivity(i);
+        }
     }
 
     public void setSnackBar(View coordinatorLayout) {
@@ -685,21 +771,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void shareit(View view) {
-       // configureButton();
-        Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
-        ShareingIntent.setType("text/plain");
-        ShareingIntent.putExtra(Intent.EXTRA_TEXT, "This is to inform you that your Friend is in need of your help. this link genrated by Natink\n" +
-                "to locate your friend. " + "\n" + "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude);
-        startActivity(ShareingIntent);
 
-
-    }
-
-    @SuppressLint("MissingPermission")
-    private void configureButton() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
-    }
 
     public void feedback(View view) {
        Intent i = new Intent(Intent.ACTION_SEND);
