@@ -64,6 +64,13 @@ public class emergencylist extends AppCompatActivity {
         secondline1 = (TextView) findViewById(R.id.secondline1);
         thirdline1 = (TextView) findViewById(R.id.thirdline1);
         fourthline1 = (TextView) findViewById(R.id.fourthline1);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i =new Intent(emergencylist.this,NotificationView.class);
+                startActivity(i);
+            }
+        });
         /*locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -124,7 +131,7 @@ public class emergencylist extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(emergencylist.this,reader.class);
+                Intent intent = new Intent(emergencylist.this,contact.class);
                 startActivity(intent);
                 finish();
 
@@ -271,7 +278,7 @@ public class emergencylist extends AppCompatActivity {
         else
         {
             notificationManager1.cancel(1);
-            send.setVisibility(View.VISIBLE);
+            send.setVisibility(View.INVISIBLE);
             listView.setVisibility(View.VISIBLE);
             firstline1.setVisibility(View.INVISIBLE);
             secondline1.setVisibility(View.INVISIBLE);

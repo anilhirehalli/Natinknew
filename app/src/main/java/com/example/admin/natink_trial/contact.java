@@ -6,29 +6,27 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
-public class reader extends AppCompatActivity {
+public class contact extends AppCompatActivity {
     ListView listView ;
     ArrayList<String> StoreContacts, selectcontacts ;
     ArrayAdapter<String> arrayAdapter ;
@@ -36,78 +34,30 @@ public class reader extends AppCompatActivity {
     String name, phonenumber ;
     public  static final int RequestPermissionCode  = 1 ;
     SearchView searchView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reader);
+        setContentView(R.layout.activity_contact);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         listView = (ListView)findViewById(R.id.listview1);
-
+        setSupportActionBar(toolbar);
         StoreContacts = new ArrayList<String>();
 
         EnableRuntimePermission();
-
-        searchView=(SearchView) findViewById(R.id.searchView1);
-        searchView.setQueryHint("Search in your Contacts");
-        searchView.setActivated(true);
-        searchView.onActionViewExpanded();
-        searchView.setIconified(false);
-        searchView.clearFocus();
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(),"Its coming",Toast.LENGTH_SHORT).show();
-                arrayAdapter.getFilter().filter(newText);
-                listView.setAdapter(arrayAdapter);
-                return false;
-            }
-        });
-        /*searchView=(SearchView) findViewById(R.id.searchView1);
-
-
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                arrayAdapter.getFilter().filter(newText);
-                listView.setAdapter(arrayAdapter);
-                return false;
-            }
-        });*/
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(contact.this,emergencylist.class);
 
-
-                Intent intent = new Intent(reader.this,emergencylist.class);
-
-                    intent.putExtra("mylist", selectcontacts);
+                intent.putExtra("mylist", selectcontacts);
 
                 startActivity(intent);
 
                 finish();
             }
         });
-
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -151,15 +101,15 @@ public class reader extends AppCompatActivity {
     public void EnableRuntimePermission(){
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(
-                reader.this,
+                contact.this,
                 Manifest.permission.READ_CONTACTS))
         {
 
-            Toast.makeText(reader.this,"CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
+            Toast.makeText(contact.this,"CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
             conti();
         } else {
 
-            ActivityCompat.requestPermissions(reader.this,new String[]{
+            ActivityCompat.requestPermissions(contact.this,new String[]{
                     Manifest.permission.READ_CONTACTS}, RequestPermissionCode);
 
         }
@@ -174,11 +124,11 @@ public class reader extends AppCompatActivity {
 
                 if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(reader.this,"Permission Granted, Now your application can access CONTACTS.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(contact.this,"Permission Granted, Now your application can access CONTACTS.", Toast.LENGTH_LONG).show();
                     conti();
                 } else {
 
-                    Toast.makeText(reader.this,"Permission Canceled, Now your application cannot access CONTACTS.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(contact.this,"Permission Canceled, Now your application cannot access CONTACTS.", Toast.LENGTH_LONG).show();
 
                 }
                 break;
@@ -193,7 +143,7 @@ public class reader extends AppCompatActivity {
         GetContactsIntoArrayList();
 
         arrayAdapter = new ArrayAdapter<String>(
-                reader.this,
+                contact.this,
                 R.layout.contacts_list_view,
                 R.id.text1, StoreContacts
         );
@@ -216,7 +166,7 @@ public class reader extends AppCompatActivity {
                 /*String string=arrayAdapter.getItem(i);*/
 
                 //selectcontacts.add(contacts.get(i));
-                AlertDialog.Builder builder = new AlertDialog.Builder(reader.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(contact.this);
                 builder.setCancelable(false);
                 builder.setTitle("     Confirm to Add");
 

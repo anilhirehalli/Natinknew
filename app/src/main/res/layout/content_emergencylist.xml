@@ -19,7 +19,8 @@
     </ListView>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/layout">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,8 +63,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="send message"
+        android:layout_below="@+id/idlist"
         android:textAlignment="center"
-        android:id="@+id/send"/>
+        android:id="@+id/send"
+        android:visibility="invisible"
+        />
 
 
 

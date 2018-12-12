@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                 //Toast.makeText(getApplicationContext(),"Its changed",Toast.LENGTH_SHORT).show();
                 progressDialog.setCancelable(false);
                 progressDialog.dismiss();
+                locationManager.removeUpdates(locationListener);
             }
 
             @Override

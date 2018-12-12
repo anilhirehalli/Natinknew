@@ -87,7 +87,10 @@ public class NotificationView extends AppCompatActivity {
                     }
                     for (int k = 0; k < sendmessage.size(); k++) {
                         SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(sendmessage.get(k), null, "This" + message, null, null);
+                        String strings[]= sendmessage.get(k).toString().split("\\n");
+                        String phno = strings[0];
+                        Toast.makeText(getApplicationContext(),phno,Toast.LENGTH_SHORT).show();
+                        smsManager.sendTextMessage(sendmessage.get(k).trim(), null, "This" + message, null, null);
                         //    Toast.makeText(getApplicationContext(), "send hasbeen called", Toast.LENGTH_SHORT).show();
                     }
                     firstline.setVisibility(View.VISIBLE);
@@ -95,6 +98,7 @@ public class NotificationView extends AppCompatActivity {
                     thirdline.setVisibility(View.VISIBLE);
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Message has not been send do report us..!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"message "+ e, Toast.LENGTH_SHORT).show();
                 }
             }
 
