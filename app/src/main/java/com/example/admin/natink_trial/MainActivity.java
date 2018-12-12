@@ -29,6 +29,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 
+import android.support.v7.app.ActionBar;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -81,6 +82,24 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        layout = (RelativeLayout) findViewById(R.id.mainer);
+        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+
+        setSupportActionBar(toolbar);
+        mTitle.setText(toolbar.getTitle());
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+
         new CountDownTimer(1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -93,9 +112,7 @@ public class MainActivity extends AppCompatActivity
             }
         }.start();
         permissionchecker();
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -145,19 +162,6 @@ public class MainActivity extends AppCompatActivity
             // locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 300, locationListener);
         }
         instance = this;
-        layout = (RelativeLayout) findViewById(R.id.mainer);
-        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-
-        setSupportActionBar(toolbar);
-        mTitle.setText(toolbar.getTitle());
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
 
         CustomNotification();
