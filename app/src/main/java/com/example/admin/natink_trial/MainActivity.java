@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       /* new CountDownTimer(1000, 1000) {
+        new CountDownTimer(1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
             }
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
             public void onFinish() {
 
             }
-        }.start();*/
+        }.start();
         permissionchecker();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
