@@ -5,14 +5,13 @@ import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
-public class first extends AppCompatActivity {
+public class mainthis extends AppCompatActivity {
     int initial1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_mainthis);
         new CountDownTimer(1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -25,26 +24,26 @@ public class first extends AppCompatActivity {
                 checkvalue();
                 //  setvalue();
                 checkvalue();
-               // Toast.makeText(getApplicationContext(),"initaial : "+initial1,Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(),"initaial : "+initial1,Toast.LENGTH_SHORT).show();
                 // Toast.makeText(getApplicationContext(),initial1+" : initial",Toast.LENGTH_SHORT).show();
-
-
-                //PES hackathone
-                /* if(initial1==0)
+                if(initial1==0)
                 {
+                   /* PrefManager prefManager = new PrefManager(getApplicationContext());
 
-                  /*  startActivity(new Intent(first.this, licence.class));
+                    // make first time launch TRUE
+                    prefManager.setFirstTimeLaunch(true);*/
+
+                    startActivity(new Intent(mainthis.this, licence.class));
                     finish();
 
                 }
 
                 else {
-                    Intent intent = new Intent(first.this, MainActivity.class);
+                    Intent intent = new Intent(mainthis.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }*/
+                }
 
-                Intent intent = new Intent(first.this, MainActivity.class);
             }
         }.start();
     }

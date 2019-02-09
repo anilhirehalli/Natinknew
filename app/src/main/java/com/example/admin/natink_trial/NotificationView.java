@@ -117,11 +117,13 @@ public class NotificationView extends AppCompatActivity {
             public void onProviderDisabled(String provider) {
                 //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 //startActivity(intent);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, locationListener);
+                //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                //startActivity(intent);
+                /*locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, locationListener);
                 progressDialog.setMessage("Please wait..."); // Setting Message
                 progressDialog.setTitle("Getting location"); // Setting Title
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
-                progressDialog.show();
+                progressDialog.show();*/
             }
         };
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M)
@@ -157,7 +159,7 @@ public class NotificationView extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     private void configureButton() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, locationListener);
         //GPS_PROVIDER
         //NETWORK_PROVIDER
 

@@ -252,7 +252,7 @@ public class emergencylist extends AppCompatActivity {
         if(sendmessage.isEmpty())
         {
             PendingIntent pendingintent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, reader.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                    new Intent(this, contact.class), PendingIntent.FLAG_UPDATE_CURRENT);
 
             Notification noti1 = new Notification.Builder(this)
                     .setContentTitle("Emergency contact is Empty")

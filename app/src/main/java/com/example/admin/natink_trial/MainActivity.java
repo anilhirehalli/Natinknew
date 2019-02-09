@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         new CountDownTimer(1000, 1000) {
             @Override
@@ -169,8 +170,7 @@ public class MainActivity extends AppCompatActivity
                 R.layout.customnotifications);
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
         am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         /* EasyFlashlight.init(this);*/
@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, about.class);
             startActivity(intent);
         } else if (id == R.id.nav_addcontacts) {
-            Intent intent = new Intent(MainActivity.this, reader.class);
+            Intent intent = new Intent(MainActivity.this, contact.class);
             startActivity(intent);
         } else if (id == R.id.nav_contacts) {
             Intent intent = new Intent(MainActivity.this, emergencylist.class);
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(getApplicationContext(), "SOS pressed", Toast.LENGTH_SHORT).show();
         Intent to = new Intent(MainActivity.this, NotificationView.class);
         startActivity(to);
-        locator();
+       // locator();
     }
 
     public void siren(View view) {
