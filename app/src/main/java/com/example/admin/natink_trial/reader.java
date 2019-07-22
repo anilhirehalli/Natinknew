@@ -66,7 +66,7 @@ public class reader extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(),"Its coming",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Its coming",Toast.LENGTH_SHORT).show();
                 arrayAdapter.getFilter().filter(newText);
                 listView.setAdapter(arrayAdapter);
                 return false;
@@ -226,7 +226,8 @@ public class reader extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String string=arrayAdapter.getItem(i);
-                        Toast.makeText(getApplicationContext(),"Item Clicked: "+ string,Toast.LENGTH_SHORT).show();
+                      //
+                        //  Toast.makeText(getApplicationContext(),"Item Clicked: "+ string,Toast.LENGTH_SHORT).show();
                         selectcontacts.add(string);
                         //    selectcontacts.add(o);
                         //   Toast.makeText(getApplicationContext(),selectcontacts

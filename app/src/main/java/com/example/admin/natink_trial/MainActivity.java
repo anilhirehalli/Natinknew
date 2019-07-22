@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -45,6 +48,7 @@ import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -77,7 +81,10 @@ public class MainActivity extends AppCompatActivity
     ArrayList<String> sendmessage = new ArrayList<String>();
     Boolean siren_on = false, whist = false, male = false, female = false, sos = false;
     static MainActivity instance;
-
+    /* torch SOS  */
+    Boolean flashLightStatus = false;
+    Camera camera;
+    Thread subject1,subject2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -282,7 +289,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_share) {
             Intent ShareingIntent = new Intent(Intent.ACTION_SEND);
             ShareingIntent.setType("text/plain");
-            ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=13arPcJphlH1J7ffJdV5FSfHRkiGcvbyT");
+            ShareingIntent.putExtra(Intent.EXTRA_TEXT, "What to do while you are in Danger? " + "\n" + "Use our S.O.S app to get yourself out of danger with the Help of our app Natink" + "\n" + " To download" + "\n" + "https://drive.google.com/open?id=0B7jzP24_Ndx1YWY4MXliQW4wcU0");
             startActivity(ShareingIntent);
         } else if (id == R.id.nav_feedback) {
             Intent i = new Intent(Intent.ACTION_SEND);
@@ -345,7 +352,7 @@ public class MainActivity extends AppCompatActivity
 
     public void emergency(View view) {
         Log.d("gps", "clicked");
-        Toast.makeText(getApplicationContext(), "SOS pressed", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "checking", Toast.LENGTH_SHORT).show();
         Intent to = new Intent(MainActivity.this, NotificationView.class);
         startActivity(to);
        // locator();
@@ -412,9 +419,10 @@ public class MainActivity extends AppCompatActivity
             }
             male = false;
         } else {
-            malevoice = MediaPlayer.create(this, R.raw.siren);
-            malevoice.start();
+            malevoice = MediaPlayer.create(this, R.raw.malevoice);
 
+            malevoice.start();
+            malevoice.setLooping(true);
             male = true;
         }
 
@@ -458,7 +466,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             fevoice = MediaPlayer.create(this, R.raw.whitsle);
             fevoice.start();
-
+            fevoice.setLooping(true);
             female = true;
         }
 
@@ -509,7 +517,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void flash(View view) {
+    /*public void flash(View view) {
        /* if(EasyFlashlight.getInstance().canAccessFlashlight()) {
             Thread t = new Thread() {
                 public void run() {
@@ -572,7 +580,42 @@ public class MainActivity extends AppCompatActivity
             snackbar.show();
         }
 */
-    }
+     /*   subject2 = new Thread(new Runnable() {
+
+            public void run() {
+                if(!flashLightStatus){
+                    flashLightStatus=true;
+                    runner();
+
+                }else{
+                    flashLightStatus=false;
+                    subject1.interrupt();
+                    subject1.stop();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+                        try {
+                            String cameraId = cameraManager.getCameraIdList()[0];
+                            cameraManager.setTorchMode(cameraId, false);
+                            flashLightStatus = false;
+
+                        } catch (CameraAccessException e) {
+                            Log.d("er", "error");
+                        }
+                    } else {
+                        camera = Camera.open();
+                        Camera.Parameters parameters = camera.getParameters();
+                        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                        camera.setParameters(parameters);
+                        camera.stopPreview();
+                        camera.release();
+                    }
+                }
+
+            }
+        });
+        subject2.start();
+    }*/
 
     public void emergencyCont(View view) {
         Intent intent = new Intent(MainActivity.this, emergencylist.class);
@@ -627,14 +670,14 @@ public class MainActivity extends AppCompatActivity
         Dexter.withActivity(this)
                 .withPermissions(
                         Manifest.permission.GET_ACCOUNTS,
-                        Manifest.permission.CHANGE_WIFI_STATE,
-                        Manifest.permission.CHANGE_NETWORK_STATE,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        /*Manifest.permission.CHANGE_WIFI_STATE,*/
+                        /*Manifest.permission.CHANGE_NETWORK_STATE,*/
+                        /*Manifest.permission.ACCESS_FINE_LOCATION,*/
                         Manifest.permission.SEND_SMS,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_WIFI_STATE,
-                        Manifest.permission.CAMERA)
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                        /*Manifest.permission.INTERNET,*/
+                        /*Manifest.permission.ACCESS_WIFI_STATE,*/
+                        /*Manifest.permission.CAMERA*/)
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -666,11 +709,20 @@ public class MainActivity extends AppCompatActivity
 
     public void setSnackBar(View coordinatorLayout) {
         Snackbar snackbar = Snackbar
-                .make(coordinatorLayout, "If permissions are not enabled then we won't be able work", Snackbar.LENGTH_INDEFINITE)
+                .make(coordinatorLayout, "If permissions are not enabled then we won't be able work", Snackbar.LENGTH_LONG)
                 .setAction("ACCEPT", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        permissionchecker();
+                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            permissionchecker();
+                        }else{
+                            Intent intent = new Intent();
+                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(),"Open Installed Apps-> Natink-> Permissions-> Enable all Permissions",Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
 
@@ -694,11 +746,11 @@ public class MainActivity extends AppCompatActivity
         thread.start();
     }*/
 
-    private boolean checkPermissions() {
+    /*private boolean checkPermissions() {
         int permissionState = ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
         return permissionState == PackageManager.PERMISSION_GRANTED;
-    }
+    }*/
 
     public void locator() {
       /*  if (checkPermissions()) {
@@ -829,6 +881,166 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+    /*public void runner(){
+
+        subject1=new Thread(new Runnable() {
+
+            public void run() {
+                while (!Thread.interrupted()){
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }ontorch();
+                try {
+                    Thread.sleep(700);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ontorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                offtorch();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }}
+        });
+        subject1.start();
+
+    }
+
+    private void ontorch(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+            try {
+                String cameraId = cameraManager.getCameraIdList()[0];
+                cameraManager.setTorchMode(cameraId, true);
+
+
+            } catch (CameraAccessException e) {
+            }
+        } else {
+            camera = Camera.open();
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(parameters);
+            camera.startPreview();
+        }
+    }
+
+    private void offtorch(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
+            try {
+                String cameraId = cameraManager.getCameraIdList()[0];
+                cameraManager.setTorchMode(cameraId, false);
+                flashLightStatus = false;
+
+            } catch (CameraAccessException e) {
+                Toast.makeText(this, "Camera Inaccessible!!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            camera = Camera.open();
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(parameters);
+            camera.stopPreview();
+            camera.release();
+        }
+    }*/
 }
 
 

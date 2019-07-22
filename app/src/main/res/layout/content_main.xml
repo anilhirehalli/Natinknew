@@ -67,7 +67,7 @@
             <LinearLayout
                 android:id="@+id/first"
                 android:layout_width="match_parent"
-                android:layout_height="135dp"
+                android:layout_height="145dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="horizontal"
                 android:weightSum="3"
@@ -142,53 +142,6 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
-                    android:id="@+id/card_viewatmRight"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/round"
-                    android:onClick="flash">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="16dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="50sp"
-                            android:layout_height="50sp"
-                            android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/ic_flashlight" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="Flash SOS"
-                            android:textAlignment="center"
-                            android:textColor="@android:color/black"
-                            android:textSize="16sp" />
-
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/second"
-                android:layout_below="@+id/first"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:orientation="horizontal"
-                android:weightSum="3"
-                android:paddingBottom="10dp"
-                android:onClick="flash">
-
-                <android.support.v7.widget.CardView
                     android:id="@+id/card_viewLeft1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -221,6 +174,54 @@
 
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
+               <!-- <android.support.v7.widget.CardView
+                    android:id="@+id/card_viewatmRight"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/round"
+                    android:onClick="flash">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal|center_vertical"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="50sp"
+                            android:layout_height="50sp"
+                            android:layout_gravity="center_horizontal"
+                            app:srcCompat="@drawable/ic_flashlight" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="Flash SOS"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/black"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>-->
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/second"
+                android:layout_below="@+id/first"
+                android:layout_width="match_parent"
+                android:layout_height="145dp"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:paddingBottom="10dp"
+                >
+
+
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/card_viewRight1"
@@ -308,7 +309,7 @@
                 android:id="@+id/third"
                 android:layout_below="@+id/second"
                 android:layout_width="match_parent"
-                android:layout_height="135dp"
+                android:layout_height="145dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:orientation="horizontal"
                 android:weightSum="3"

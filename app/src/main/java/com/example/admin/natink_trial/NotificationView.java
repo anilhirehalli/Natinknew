@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -57,12 +59,17 @@ public class NotificationView extends AppCompatActivity {
                 configureButton();
             }
         }.start();
+        progressDialog = new ProgressDialog(NotificationView.this);
+        progressDialog.setMessage("Please wait..."); // Setting Message
+        progressDialog.setTitle("Getting location"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show();
        // Toast.makeText(getApplicationContext(),"Notification Clicked ",Toast.LENGTH_SHORT).show();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Toast.makeText(getApplicationContext()," "+location.getLatitude()+"  "+location.getLongitude(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext()," "+location.getLatitude()+"  "+location.getLongitude(),Toast.LENGTH_SHORT).show();
                 latitude = location.getLatitude();
                 longitude = location.getLongitude();
                 loaddata();
@@ -89,13 +96,30 @@ public class NotificationView extends AppCompatActivity {
                         SmsManager smsManager = SmsManager.getDefault();
                         String strings[]= sendmessage.get(k).toString().split("\\n");
                         String phno = strings[0];
-                        Toast.makeText(getApplicationContext(),phno,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),phno,Toast.LENGTH_SHORT).show();
                         smsManager.sendTextMessage(sendmessage.get(k).trim(), null, "This" + message, null, null);
                         //    Toast.makeText(getApplicationContext(), "send hasbeen called", Toast.LENGTH_SHORT).show();
                     }
-                    firstline.setVisibility(View.VISIBLE);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NotificationView.this);
+                    builder.setCancelable(false);
+                    builder.setTitle(" Location sent");
+
+                    builder.setIcon(R.drawable.ic_contacts_black_24dp);
+                    builder.setMessage("Location has been sent to the enlisted contact list");
+                    builder.setPositiveButton("back", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                          Intent i = new Intent(NotificationView.this,MainActivity.class);
+                          startActivity(i);
+                        }
+                    });
+
+                    // Create the AlertDialog object and return it
+                    builder.create().show();
+                  /*  firstline.setVisibility(View.VISIBLE);
                     secondline.setVisibility(View.VISIBLE);
-                    thirdline.setVisibility(View.VISIBLE);
+                    thirdline.setVisibility(View.VISIBLE);*/
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), "Message has not been send do report us..!", Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(),"message "+ e, Toast.LENGTH_SHORT).show();

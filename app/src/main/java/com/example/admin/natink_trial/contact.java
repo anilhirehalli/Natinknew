@@ -105,7 +105,7 @@ public class contact extends AppCompatActivity {
                 Manifest.permission.READ_CONTACTS))
         {
 
-            Toast.makeText(contact.this,"CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
+          //  Toast.makeText(contact.this,"CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
             conti();
         } else {
 
@@ -124,7 +124,7 @@ public class contact extends AppCompatActivity {
 
                 if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    Toast.makeText(contact.this,"Permission Granted, Now your application can access CONTACTS.", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(contact.this,"Permission Granted, Now your application can access CONTACTS.", Toast.LENGTH_LONG).show();
                     conti();
                 } else {
 
@@ -176,7 +176,7 @@ public class contact extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String string=arrayAdapter.getItem(i);
-                        Toast.makeText(getApplicationContext(),"Item Clicked: "+ string,Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getApplicationContext(),"Item Clicked: "+ string,Toast.LENGTH_SHORT).show();
                         selectcontacts.add(string);
                         //    selectcontacts.add(o);
                         //   Toast.makeText(getApplicationContext(),selectcontacts

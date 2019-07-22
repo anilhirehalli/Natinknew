@@ -148,7 +148,7 @@ public class emergencylist extends AppCompatActivity {
         else {
 
             count = selectcontacts.size();
-            Toast.makeText(getApplicationContext(), count + " count", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(), count + " count", Toast.LENGTH_SHORT).show();
 
             for (i = 0; i < count; i++) {
                 sendmessage.add(selectcontacts.get(i));
